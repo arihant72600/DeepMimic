@@ -3,7 +3,7 @@ OBJ_DIR = objs
 MKDIR = mkdir -p
 
 EIGEN_DIR = /usr/local/include/eigen3
-BULLET_INC_DIR = ../../bullet3-2.88/src
+BULLET_INC_DIR = /usr/local/include/bullet/
 
 PYTHON_INC = /usr/include/python3.7m
 PYTHON_LIB = /usr/lib/ -lpython3.7m
