@@ -2,7 +2,7 @@ BIN=Main
 OBJ_DIR = objs
 MKDIR = mkdir -p
 
-EIGEN_DIR = /usr/local/include/eigen3/Eigen
+EIGEN_DIR = /usr/local/include/eigen3
 BULLET_INC_DIR = ../../bullet3-2.8.8/src
 
 PYTHON_INC = /usr/include/python3.7m
