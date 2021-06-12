@@ -28,5 +28,6 @@
 
 --agent_files data/agents/ct_agent_humanoid_ppo.txt
 
+--model_files output/run_save/agent0_model.ckpt
 --output_path output
 #--int_output_path output/intermediate

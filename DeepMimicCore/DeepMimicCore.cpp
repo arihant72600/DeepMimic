@@ -22,7 +22,7 @@ void cDeepMimicCore::SeedRand(int seed)
 	cMathUtil::SeedRand(seed);
 }
 
-void cDeepMimicCore::ParseArgs(const std::vector<std::string>& args)
+void cDeepMimicCore::ParseArgs(const std::vector<std::string> &args)
 {
 	mArgParser->LoadArgs(args);
 
@@ -119,7 +119,7 @@ void cDeepMimicCore::Reshape(int w, int h)
 	mScene->Reshape(w, h);
 	mDefaultFrameBuffer->Reshape(w, h);
 	glViewport(0, 0, w, h);
-	glutPostRedisplay();
+	//glutPostRedisplay();
 }
 
 void cDeepMimicCore::Shutdown()
@@ -132,9 +132,9 @@ bool cDeepMimicCore::IsDone() const
 	return mScene->IsDone();
 }
 
-cDrawScene* cDeepMimicCore::GetDrawScene() const
+cDrawScene *cDeepMimicCore::GetDrawScene() const
 {
-	return dynamic_cast<cDrawScene*>(mScene.get());
+	return dynamic_cast<cDrawScene *>(mScene.get());
 }
 
 void cDeepMimicCore::SetPlaybackSpeed(double speed)
@@ -164,13 +164,13 @@ int cDeepMimicCore::GetNumUpdateSubsteps() const
 
 bool cDeepMimicCore::IsRLScene() const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	return rl_scene != nullptr;
 }
 
 int cDeepMimicCore::GetNumAgents() const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		return rl_scene->GetNumAgents();
@@ -180,7 +180,7 @@ int cDeepMimicCore::GetNumAgents() const
 
 bool cDeepMimicCore::NeedNewAction(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		return rl_scene->NeedNewAction(agent_id);
@@ -190,7 +190,7 @@ bool cDeepMimicCore::NeedNewAction(int agent_id) const
 
 std::vector<double> cDeepMimicCore::RecordState(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXd state;
@@ -205,7 +205,7 @@ std::vector<double> cDeepMimicCore::RecordState(int agent_id) const
 
 std::vector<double> cDeepMimicCore::RecordGoal(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXd goal;
@@ -218,9 +218,9 @@ std::vector<double> cDeepMimicCore::RecordGoal(int agent_id) const
 	return std::vector<double>(0);
 }
 
-void cDeepMimicCore::SetAction(int agent_id, const std::vector<double>& action)
+void cDeepMimicCore::SetAction(int agent_id, const std::vector<double> &action)
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXd in_action;
@@ -231,7 +231,7 @@ void cDeepMimicCore::SetAction(int agent_id, const std::vector<double>& action)
 
 void cDeepMimicCore::LogVal(int agent_id, double val)
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		rl_scene->LogVal(agent_id, val);
@@ -241,7 +241,7 @@ void cDeepMimicCore::LogVal(int agent_id, double val)
 int cDeepMimicCore::GetActionSpace(int agent_id) const
 {
 	eActionSpace action_space = eActionSpaceNull;
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		action_space = rl_scene->GetActionSpace(agent_id);
@@ -251,7 +251,7 @@ int cDeepMimicCore::GetActionSpace(int agent_id) const
 
 int cDeepMimicCore::GetStateSize(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		return rl_scene->GetStateSize(agent_id);
@@ -261,7 +261,7 @@ int cDeepMimicCore::GetStateSize(int agent_id) const
 
 int cDeepMimicCore::GetGoalSize(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		return rl_scene->GetGoalSize(agent_id);
@@ -271,7 +271,7 @@ int cDeepMimicCore::GetGoalSize(int agent_id) const
 
 int cDeepMimicCore::GetActionSize(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		return rl_scene->GetActionSize(agent_id);
@@ -281,7 +281,7 @@ int cDeepMimicCore::GetActionSize(int agent_id) const
 
 int cDeepMimicCore::GetNumActions(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		return rl_scene->GetNumActions(agent_id);
@@ -291,7 +291,7 @@ int cDeepMimicCore::GetNumActions(int agent_id) const
 
 std::vector<double> cDeepMimicCore::BuildStateOffset(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXd offset;
@@ -307,7 +307,7 @@ std::vector<double> cDeepMimicCore::BuildStateOffset(int agent_id) const
 
 std::vector<double> cDeepMimicCore::BuildStateScale(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXd offset;
@@ -323,7 +323,7 @@ std::vector<double> cDeepMimicCore::BuildStateScale(int agent_id) const
 
 std::vector<double> cDeepMimicCore::BuildGoalOffset(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXd offset;
@@ -339,7 +339,7 @@ std::vector<double> cDeepMimicCore::BuildGoalOffset(int agent_id) const
 
 std::vector<double> cDeepMimicCore::BuildGoalScale(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXd offset;
@@ -355,7 +355,7 @@ std::vector<double> cDeepMimicCore::BuildGoalScale(int agent_id) const
 
 std::vector<double> cDeepMimicCore::BuildActionOffset(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXd offset;
@@ -371,7 +371,7 @@ std::vector<double> cDeepMimicCore::BuildActionOffset(int agent_id) const
 
 std::vector<double> cDeepMimicCore::BuildActionScale(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXd offset;
@@ -387,7 +387,7 @@ std::vector<double> cDeepMimicCore::BuildActionScale(int agent_id) const
 
 std::vector<double> cDeepMimicCore::BuildActionBoundMin(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXd bound_min;
@@ -403,7 +403,7 @@ std::vector<double> cDeepMimicCore::BuildActionBoundMin(int agent_id) const
 
 std::vector<double> cDeepMimicCore::BuildActionBoundMax(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXd bound_min;
@@ -419,7 +419,7 @@ std::vector<double> cDeepMimicCore::BuildActionBoundMax(int agent_id) const
 
 std::vector<int> cDeepMimicCore::BuildStateNormGroups(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXi groups;
@@ -434,7 +434,7 @@ std::vector<int> cDeepMimicCore::BuildStateNormGroups(int agent_id) const
 
 std::vector<int> cDeepMimicCore::BuildGoalNormGroups(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXi groups;
@@ -449,7 +449,7 @@ std::vector<int> cDeepMimicCore::BuildGoalNormGroups(int agent_id) const
 
 double cDeepMimicCore::CalcReward(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		return rl_scene->CalcReward(agent_id);
@@ -459,7 +459,7 @@ double cDeepMimicCore::CalcReward(int agent_id) const
 
 double cDeepMimicCore::GetRewardMin(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		return rl_scene->GetRewardMin(agent_id);
@@ -469,7 +469,7 @@ double cDeepMimicCore::GetRewardMin(int agent_id) const
 
 double cDeepMimicCore::GetRewardMax(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		return rl_scene->GetRewardMax(agent_id);
@@ -479,7 +479,7 @@ double cDeepMimicCore::GetRewardMax(int agent_id) const
 
 double cDeepMimicCore::GetRewardFail(int agent_id)
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		return rl_scene->GetRewardFail(agent_id);
@@ -489,7 +489,7 @@ double cDeepMimicCore::GetRewardFail(int agent_id)
 
 double cDeepMimicCore::GetRewardSucc(int agent_id)
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		return rl_scene->GetRewardSucc(agent_id);
@@ -499,7 +499,7 @@ double cDeepMimicCore::GetRewardSucc(int agent_id)
 
 bool cDeepMimicCore::EnableAMPTaskReward() const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		return rl_scene->EnableAMPTaskReward();
@@ -509,7 +509,7 @@ bool cDeepMimicCore::EnableAMPTaskReward() const
 
 int cDeepMimicCore::GetAMPObsSize() const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		return rl_scene->GetAMPObsSize();
@@ -519,7 +519,7 @@ int cDeepMimicCore::GetAMPObsSize() const
 
 std::vector<double> cDeepMimicCore::GetAMPObsOffset() const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXd offset;
@@ -534,7 +534,7 @@ std::vector<double> cDeepMimicCore::GetAMPObsOffset() const
 
 std::vector<double> cDeepMimicCore::GetAMPObsScale() const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXd scale;
@@ -549,7 +549,7 @@ std::vector<double> cDeepMimicCore::GetAMPObsScale() const
 
 std::vector<int> cDeepMimicCore::GetAMPObsNormGroup() const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXi groups;
@@ -564,7 +564,7 @@ std::vector<int> cDeepMimicCore::GetAMPObsNormGroup() const
 
 std::vector<double> cDeepMimicCore::RecordAMPObsAgent(int agent_id)
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXd obs;
@@ -579,7 +579,7 @@ std::vector<double> cDeepMimicCore::RecordAMPObsAgent(int agent_id)
 
 std::vector<double> cDeepMimicCore::RecordAMPObsExpert(int agent_id)
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		Eigen::VectorXd obs;
@@ -604,7 +604,7 @@ bool cDeepMimicCore::CheckValidEpisode() const
 
 int cDeepMimicCore::CheckTerminate(int agent_id) const
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	cRLScene::eTerminate terminated = cRLScene::eTerminateNull;
 	if (rl_scene != nullptr)
 	{
@@ -616,7 +616,7 @@ int cDeepMimicCore::CheckTerminate(int agent_id) const
 void cDeepMimicCore::SetMode(int mode)
 {
 	assert(mode >= 0 && mode < cRLScene::eModeMax);
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		rl_scene->SetMode(static_cast<cRLScene::eMode>(mode));
@@ -625,7 +625,7 @@ void cDeepMimicCore::SetMode(int mode)
 
 void cDeepMimicCore::SetSampleCount(int count)
 {
-	const auto& rl_scene = GetRLScene();
+	const auto &rl_scene = GetRLScene();
 	if (rl_scene != nullptr)
 	{
 		rl_scene->SetSampleCount(count);
@@ -674,7 +674,7 @@ void cDeepMimicCore::InitFrameBuffer()
 	mDefaultFrameBuffer = std::unique_ptr<cTextureDesc>(new cTextureDesc(0, 0, 0, 1, 1, 1, GL_RGBA, GL_RGBA));
 }
 
-void cDeepMimicCore::CalcDeviceCoord(int pixel_x, int pixel_y, double& out_device_x, double& out_device_y) const
+void cDeepMimicCore::CalcDeviceCoord(int pixel_x, int pixel_y, double &out_device_x, double &out_device_y) const
 {
 	double w = GetWinWidth();
 	double h = GetWinHeight();
@@ -691,38 +691,38 @@ double cDeepMimicCore::GetAspectRatio()
 	return aspect_ratio;
 }
 
-void cDeepMimicCore::CopyFrame(cTextureDesc& src) const
+void cDeepMimicCore::CopyFrame(cTextureDesc &src) const
 {
 	cDrawUtil::CopyTexture(src);
 }
 
-const std::shared_ptr<cRLScene>& cDeepMimicCore::GetRLScene() const
+const std::shared_ptr<cRLScene> &cDeepMimicCore::GetRLScene() const
 {
 	return mRLScene;
 }
 
-void cDeepMimicCore::ConvertVector(const Eigen::VectorXd& in_vec, std::vector<double>& out_vec) const
+void cDeepMimicCore::ConvertVector(const Eigen::VectorXd &in_vec, std::vector<double> &out_vec) const
 {
 	int size = static_cast<int>(in_vec.size());
 	out_vec.resize(size);
 	std::memcpy(out_vec.data(), in_vec.data(), size * sizeof(double));
 }
 
-void cDeepMimicCore::ConvertVector(const Eigen::VectorXi& in_vec, std::vector<int>& out_vec) const
+void cDeepMimicCore::ConvertVector(const Eigen::VectorXi &in_vec, std::vector<int> &out_vec) const
 {
 	int size = static_cast<int>(in_vec.size());
 	out_vec.resize(size);
 	std::memcpy(out_vec.data(), in_vec.data(), size * sizeof(int));
 }
 
-void cDeepMimicCore::ConvertVector(const std::vector<double>& in_vec, Eigen::VectorXd& out_vec) const
+void cDeepMimicCore::ConvertVector(const std::vector<double> &in_vec, Eigen::VectorXd &out_vec) const
 {
 	int size = static_cast<int>(in_vec.size());
 	out_vec.resize(size);
 	std::memcpy(out_vec.data(), in_vec.data(), size * sizeof(double));
 }
 
-void cDeepMimicCore::ConvertVector(const std::vector<int>& in_vec, Eigen::VectorXi& out_vec) const
+void cDeepMimicCore::ConvertVector(const std::vector<int> &in_vec, Eigen::VectorXi &out_vec) const
 {
 	int size = static_cast<int>(in_vec.size());
 	out_vec.resize(size);

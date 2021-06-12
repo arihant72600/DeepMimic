@@ -1,7 +1,46 @@
 import numpy as np
 import copy
 import tensorflow as tf
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 from learning.normalizer import Normalizer
+
+class TorchNormalizer(Normalizer):
+    def __init__(self, size, groups_ids=None, eps=0.02, clip=np.inf):
+        super().__init__(size, groups_ids, eps, clip)
+        self.count_torch = torch.tensor(np.array([self.count], dtype=np.int32))
+        self.mean_torch = torch.tensor(self.mean.astype(np.float32))
+        self.std_torch = torch.tensor(self.std.astype(np.float32))
+
+    def update_resource_torch(self):
+        self.count_torch = torch.tensor(np.array([self.count], dtype=np.int32))
+        self.mean_torch = torch.tensor(self.mean)
+        self.std_torch = torch.tensor(self.std)
+
+    def load(self):
+        self.count = self.count_torch.numpy()[0]
+        self.mean = self.mean_torch.numpy()
+        self.std = self.std_torch.numpy()
+        self.mean_sq = self.calc_mean_sq(self.mean, self.std)
+
+    def update(self):
+        super().update()
+        self.update_resource_torch()
+
+    def set_mean_std(self, mean, std):
+        super().set_mean_std(mean, std)
+        self.update_resource_torch()
+
+    def normalize_torch(self, x):
+        norm_x = (x - self.mean_torch) / self.std_torch
+        norm_x = tf.clip_by_value(norm_x, -self.clip, self.clip)
+        return norm_x
+
+    def unnormalize_torch(self, norm_x):
+        x = norm_x * self.std_torch + self.mean_torch
+        return x
+
 
 class TFNormalizer(Normalizer):
 

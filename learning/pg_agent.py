@@ -1,5 +1,8 @@
 import numpy as np
 import tensorflow as tf
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 import copy
 
 from learning.tf_agent import TFAgent
@@ -17,6 +20,11 @@ from env.env import Env
 '''
 Policy Gradient Agent
 '''
+
+class PGAgentTorch(nn.Module):
+    def __init__(self):
+        super(PGAgentTorch, self).__init__()
+
 
 class PGAgent(TFAgent):
     NAME = 'PG'

@@ -1,30 +1,95 @@
+from os.path import exists
+
 import numpy as np
 import tensorflow as tf
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 from abc import abstractmethod
 
 from learning.rl_agent import RLAgent
 from util.logger import Logger
-from learning.tf_normalizer import TFNormalizer
+from learning.tf_normalizer import TFNormalizer, TorchNormalizer
+
+class TorchAgent(RLAgent):
+    def __init__(self, world, id, json_data):
+        super().__init__(world, id, json_data)
+        self.models = self._build_nets(json_data)
+        self.losses = self._build_losses(json_data)
+        self.solvers = self._build_solvers(json_data)
+
+        self._init_normalizers()
+
+    def save_model(self, out_path):
+        for i, model in enumerate(self.models):
+            torch.save(model.state_dict(), out_path + str(i))
+
+    def load_model(self, in_path):
+        i = 0
+        while exists(in_path + str(i)):
+            self.model[i].load_state_dict(torch.load(in_path + str(i)))
+
+    def _get_output_path(self):
+        assert(self.output_dir != '')
+        file_path = self.output_dir + '/agent' + str(self.id) + '_model_torch'
+        return file_path
+
+    def _get_int_output_path(self):
+        assert(self.int_output_dir != '')
+        file_path = self.int_output_dir + ('/agent{:d}_models/agent{:d}_int_model_{:010d}_torch').format(self.id, self.id, self.iter)
+        return file_path
+
+    
+
+    @abstractmethod
+    def _build_nets(self, json_data):
+        pass
+
+    @abstractmethod
+    def _build_losses(self, json_data):
+        pass
+
+    @abstractmethod
+    def _build_solvers(self, json_data):
+        pass
+
+    def _init_normalizers(self):
+        self._s_norm.update()
+        self._g_norm.update()
+        self._a_norm.update()
+
+    def _build_normalizers(self):
+        self._s_norm = TorchNormalizer(self.get_state_size(), self.world.env.build_state_norm_groups(self.id))
+        self._s_norm.set_mean_std(-self.world.env.build_state_offset(self.id), 
+                                    1 / self.world.env.build_state_scale(self.id))
+        
+        self._g_norm = TFNormalizer(self.get_goal_size(), self.world.env.build_goal_norm_groups(self.id))
+        self._g_norm.set_mean_std(-self.world.env.build_goal_offset(self.id), 
+                                    1 / self.world.env.build_goal_scale(self.id))
+
+        self._a_norm = TFNormalizer(self.get_action_size())
+        self._a_norm.set_mean_std(-self.world.env.build_action_offset(self.id), 
+                                    1 / self.world.env.build_action_scale(self.id))
 
 class TFAgent(RLAgent):
     RESOURCE_SCOPE = 'resource'
     SOLVER_SCOPE = 'solvers'
 
-    def __init__(self, world, id, json_data):
+    def __init__(self, world, id, json_data):#DOne
         self.tf_scope = 'agent'
         self.graph = tf.Graph()
-        self.sess = tf.Session(graph=self.graph)
+        self.sess = tf.Session(graph=self.graph) # TODO delete
 
         super().__init__(world, id, json_data)
         self._build_graph(json_data)
         self._init_normalizers()
         return
 
-    def __del__(self):
-        self.sess.close()
+    def __del__(self):#DOne
+        self.sess.close() # TODO delete
         return
 
-    def save_model(self, out_path):
+    def save_model(self, out_path):#Needs impl
         with self.sess.as_default(), self.graph.as_default():
             try:
                 save_path = self.saver.save(self.sess, out_path, write_meta_graph=False, write_state=False)
@@ -33,7 +98,7 @@ class TFAgent(RLAgent):
                 Logger.print("Failed to save model to: " + save_path)
         return
 
-    def load_model(self, in_path):
+    def load_model(self, in_path):#Needs impl
         with self.sess.as_default(), self.graph.as_default():
             self.saver.restore(self.sess, in_path)
             self._load_normalizers()
@@ -50,7 +115,7 @@ class TFAgent(RLAgent):
         file_path = self.int_output_dir + ('/agent{:d}_models/agent{:d}_int_model_{:010d}.ckpt').format(self.id, self.id, self.iter)
         return file_path
 
-    def _build_graph(self, json_data):
+    def _build_graph(self, json_data): #DOne
         with self.sess.as_default(), self.graph.as_default():
             with tf.variable_scope(self.tf_scope):
                 self._build_nets(json_data)
@@ -63,7 +128,7 @@ class TFAgent(RLAgent):
                 self._build_saver()
         return
 
-    def _init_normalizers(self):
+    def _init_normalizers(self):#DOne
         with self.sess.as_default(), self.graph.as_default():
             # update normalizers to sync the tensorflow tensors
             self._s_norm.update()
@@ -72,15 +137,15 @@ class TFAgent(RLAgent):
         return
 
     @abstractmethod
-    def _build_nets(self, json_data):
+    def _build_nets(self, json_data):#DOne
         pass
 
     @abstractmethod
-    def _build_losses(self, json_data):
+    def _build_losses(self, json_data):#DOne
         pass
 
     @abstractmethod
-    def _build_solvers(self, json_data):
+    def _build_solvers(self, json_data):#DOne
         pass
 
     def _tf_vars(self, scope=''):
@@ -89,7 +154,7 @@ class TFAgent(RLAgent):
             assert len(res) > 0
         return res
 
-    def _build_normalizers(self):
+    def _build_normalizers(self):#DOne
         with self.sess.as_default(), self.graph.as_default(), tf.variable_scope(self.tf_scope):
             with tf.variable_scope(self.RESOURCE_SCOPE):
                 self._s_norm = TFNormalizer(self.sess, 's_norm', self.get_state_size(), self.world.env.build_state_norm_groups(self.id))
